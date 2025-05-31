@@ -2,9 +2,8 @@ package PageObject;
 
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
-
+import java.time.Duration;
 import java.util.Objects;
-
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 public class ConstructorPage {
@@ -18,21 +17,21 @@ public class ConstructorPage {
     @Step("Переключиться на вкладку 'Булки'")
     public void switchToBuns() {
         bunsTab.scrollIntoView(true).shouldBe(visible, enabled).click();
-        // Ожидаем, что в атрибуте class элемента bunsTab появится подстрока "tab_tab_type_current"
-        bunsTab.shouldHave(attributeMatching("class", ".*tab_tab_type_current.*"));
+        bunsTab.shouldHave(attributeMatching("class", ".*tab_tab_type_current.*"), Duration.ofSeconds(15));
     }
 
     @Step("Переключиться на вкладку 'Соусы'")
     public void switchToSauces() {
         saucesTab.scrollIntoView(true).shouldBe(visible, enabled).click();
-        saucesTab.shouldHave(attributeMatching("class", ".*tab_tab_type_current.*"));
+        saucesTab.shouldHave(attributeMatching("class", ".*tab_tab_type_current.*"), Duration.ofSeconds(15));
     }
 
     @Step("Переключиться на вкладку 'Начинки'")
     public void switchToFillings() {
         fillingsTab.scrollIntoView(true).shouldBe(visible, enabled).click();
-        fillingsTab.shouldHave(attributeMatching("class", ".*tab_tab_type_current.*"));
+        fillingsTab.shouldHave(attributeMatching("class", ".*tab_tab_type_current.*"), Duration.ofSeconds(15));
     }
+
 
     @Step("Проверить, что вкладка 'Булки' активна")
     public boolean isBunsTabActive() {

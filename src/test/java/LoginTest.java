@@ -21,7 +21,7 @@ public class LoginTest {
 
     @BeforeClass
     public static void setupClass() {
-        BrowserProvider.configureSelenide("chrome"); // или "yandex"
+        BrowserProvider.configureSelenide("yandex"); // или "yandex"
     }
 
     @Before

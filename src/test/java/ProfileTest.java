@@ -18,7 +18,7 @@ public class ProfileTest {
 
     @BeforeClass
     public static void setupClass() {
-        BrowserProvider.configureSelenide("chrome");
+        BrowserProvider.configureSelenide("yandex");
     }
 
     @Before

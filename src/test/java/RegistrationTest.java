@@ -23,7 +23,7 @@ public class RegistrationTest {
     @BeforeClass
     public static void setupClass() {
         // Указываем браузер: "chrome" или "yandex"
-        BrowserProvider.configureSelenide("chrome");
+        BrowserProvider.configureSelenide("yandex");
     }
 
     @Before
