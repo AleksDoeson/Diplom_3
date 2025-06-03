@@ -1,39 +1,49 @@
-import io.qameta.allure.Step;
+import io.qameta.allure.junit4.DisplayName;
+import net.datafaker.Faker;
 import org.junit.*;
-import PageObject.LoginPage;
-import PageObject.MainPage;
-import PageObject.ProfilePage;
-import Utils.ApiUtils;
-import Utils.BrowserProvider;
+import pageobject.LoginPage;
+import pageobject.MainPage;
+import pageobject.ProfilePage;
+import utils.ApiUtils;
+import utils.BrowserProvider;
+import utils.UserModel;
 
 import static com.codeborne.selenide.Selenide.*;
+import static org.junit.Assert.*;
+import static pageobject.MainPage.BASE_URL;
 
 public class ProfileTest {
 
     private MainPage mainPage;
     private ProfilePage profilePage;
+    private LoginPage loginPage;
 
-    private final String testEmail = "testprofile" + System.currentTimeMillis() + "@mail.ru";
+    private UserModel testUser;
     private String accessToken;
+    private static Faker faker;
 
     @BeforeClass
     public static void setupClass() {
         BrowserProvider.configureSelenide("yandex");
+        faker = new Faker();
     }
 
     @Before
     public void setup() {
-        open("https://stellarburgers.nomoreparties.site/");
+        open(BASE_URL);
         mainPage = new MainPage();
-        LoginPage loginPage = new LoginPage();
+        loginPage = new LoginPage();
         profilePage = new ProfilePage();
 
-        String testPassword = "Password123!";
-        String testName = "Test ProfileUser";
-        accessToken = ApiUtils.createUser(testEmail, testPassword, testName);
+        String email = faker.internet().emailAddress();
+        String password = faker.internet().password(8, 16);
+        String name = faker.name().fullName();
+
+        testUser = new UserModel(email, password, name);
+        accessToken = ApiUtils.createUser(testUser);
 
         mainPage.clickLogin();
-        loginPage.login(testEmail, testPassword);
+        loginPage.login(testUser.getEmail(), testUser.getPassword());
     }
 
     @After
@@ -45,51 +55,54 @@ public class ProfileTest {
     }
 
     @Test
-    @Step("Проверка, что пользователь видит профиль после входа")
+    @DisplayName("Проверка, что пользователь видит профиль после входа")
     public void testProfileHeaderIsVisible() {
         mainPage.clickProfile();
-        Assert.assertTrue(
+        assertTrue(
                 "Заголовок профиля должен отображаться после входа",
                 profilePage.isProfileHeaderVisible("Профиль")
         );
     }
 
     @Test
-    @Step("Проверка выхода из профиля и появления страницы Авторизации")
+    @DisplayName("Проверка выхода из профиля и появления страницы Авторизации")
     public void testLogout() {
         mainPage.clickProfile();
         profilePage.logout();
 
-        Assert.assertTrue(
-                "После выхода должен отображаться заголовок конструктора",
+        assertTrue(
+                "После выхода должен отображаться заголовок логина",
                 profilePage.isLoginHeaderVisible()
         );
     }
 
     @Test
-    @Step("Проверка перехода в конструктор из профиля по кнопке 'Конструктор'")
+    @DisplayName("Проверка перехода в конструктор из профиля по кнопке 'Конструктор'")
     public void testGoToConstructorFromProfile() {
         mainPage.clickProfile();
         profilePage.goToConstructor();
 
-        Assert.assertTrue(
+        assertTrue(
                 "После клика по 'Конструктор' должен отображаться заголовок конструктора",
                 profilePage.isConstructorHeaderVisible()
         );
     }
 
     @Test
-    @Step("Проверка перехода в конструктор из профиля по клику на логотип Stellar Burgers")
+    @DisplayName("Проверка перехода в конструктор из профиля по клику на логотип Stellar Burgers")
     public void testGoToConstructorFromProfileByLogo() {
         mainPage.clickProfile();
         profilePage.clickLogo();
 
-        Assert.assertTrue(
+        assertTrue(
                 "После клика по логотипу должен отображаться заголовок конструктора",
                 profilePage.isConstructorHeaderVisible()
         );
     }
 }
+
+
+
 
 
 

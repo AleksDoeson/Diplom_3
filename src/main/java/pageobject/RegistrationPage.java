@@ -1,4 +1,4 @@
-package PageObject;
+package pageobject;
 
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
@@ -8,11 +8,19 @@ import static com.codeborne.selenide.Selenide.$x;
 
 public class RegistrationPage {
 
-    public final SelenideElement nameInput = $x("//*[@id='root']/div/main/div/form/fieldset[1]/div/div/input");
-    private final SelenideElement emailInput = $x("//*[@id='root']/div/main/div/form/fieldset[2]/div/div/input");
-    private final SelenideElement passwordInput = $x("//*[@id='root']/div/main/div/form/fieldset[3]/div/div/input");
-    private final SelenideElement registerButton = $x("//*[@id='root']/div/main/div/form/button");
-    private final SelenideElement errorMessage = $x("//*[@id='root']/div/main/div/form/fieldset[3]/div/p");
+    // Инпут Имя — по атрибуту name='name' и классу
+    public final SelenideElement nameInput = $x("//input[@name='name' and contains(@class, 'input__textfield')]");
+
+    private final SelenideElement emailInput = $x("//label[contains(text(),'Email')]/following-sibling::input[contains(@class, 'input__textfield')]");
+
+    // Инпут Пароль — по типу 'password' и классу
+    private final SelenideElement passwordInput = $x("//input[@type='password' and contains(@class, 'input__textfield')]");
+
+    // Кнопка Зарегистрироваться — кнопка с текстом 'Зарегистрироваться' и классом кнопки
+    private final SelenideElement registerButton = $x("//button[contains(text(),'Зарегистрироваться') and contains(@class, 'button_button')]");
+
+    // Сообщение об ошибке — <p> с классом 'input__error'
+    private final SelenideElement errorMessage = $x("//p[contains(@class, 'input__error')]");
 
     @Step("Ввести имя: {name}")
     public void setName(String name) {
@@ -47,4 +55,5 @@ public class RegistrationPage {
         return errorMessage.shouldBe(visible).getText();
     }
 }
+
 

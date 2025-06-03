@@ -1,12 +1,13 @@
-import io.qameta.allure.Step;
+import io.qameta.allure.junit4.DisplayName;
 import org.junit.*;
-import PageObject.ConstructorPage;
-import PageObject.MainPage;
-import Utils.BrowserProvider;
+import pageobject.ConstructorPage;
+import pageobject.MainPage;
+import utils.BrowserProvider;
 
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static org.junit.Assert.*;
+import static pageobject.MainPage.BASE_URL;
 
 public class ConstructorTests {
 
@@ -14,16 +15,14 @@ public class ConstructorTests {
 
     @BeforeClass
     public static void setupClass() {
-        BrowserProvider.configureSelenide("chrome"); // или "yandex"
+        BrowserProvider.configureSelenide("yandex");
     }
 
     @Before
     public void setup() {
-        // Открываем главную страницу Stellar Burgers
-        open("https://stellarburgers.nomoreparties.site/");
+        open(BASE_URL);
         MainPage mainPage = new MainPage();
         constructorPage = new ConstructorPage();
-        // Переходим в Конструктор (по логотипу/кнопке "Конструктор")
         mainPage.clickConstructor();
     }
 
@@ -33,7 +32,7 @@ public class ConstructorTests {
     }
 
     @Test
-    @Step("Проверка, что вкладка 'Булки' активна по умолчанию")
+    @DisplayName("Проверка, что вкладка 'Булки' активна по умолчанию")
     public void testBunsTabIsActiveByDefault() {
         assertTrue(
                 "Вкладка 'Булки' должна быть активна по умолчанию",
@@ -42,7 +41,7 @@ public class ConstructorTests {
     }
 
     @Test
-    @Step("Проверка активации вкладки 'Соусы'")
+    @DisplayName("Проверка активации вкладки 'Соусы'")
     public void testSaucesTabIsActive() {
         constructorPage.switchToSauces();
         assertTrue(
@@ -52,7 +51,7 @@ public class ConstructorTests {
     }
 
     @Test
-    @Step("Проверка активации вкладки 'Начинки'")
+    @DisplayName("Проверка активации вкладки 'Начинки'")
     public void testFillingsTabIsActive() {
         constructorPage.switchToFillings();
         assertTrue(
@@ -62,16 +61,14 @@ public class ConstructorTests {
     }
 
     @Test
-    @Step("Проверка переключения с вкладки 'Начинки' на вкладку 'Булки'")
+    @DisplayName("Проверка переключения с вкладки 'Начинки' на вкладку 'Булки'")
     public void testSwitchFromFillingsToBuns() {
-        // Сначала переключаемся на "Начинки" и убеждаемся, что они активны
         constructorPage.switchToFillings();
         assertTrue(
                 "Вкладка 'Начинки' должна быть активна после клика",
                 constructorPage.isFillingsTabActive()
         );
 
-        // Затем переключаемся на "Булки" и проверяем, что они снова активны
         constructorPage.switchToBuns();
         assertTrue(
                 "После перехода с 'Начинки' на 'Булки' вкладка 'Булки' должна быть активна",
@@ -79,6 +76,7 @@ public class ConstructorTests {
         );
     }
 }
+
 
 
 

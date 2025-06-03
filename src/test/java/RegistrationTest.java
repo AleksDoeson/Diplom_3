@@ -1,84 +1,75 @@
-import io.qameta.allure.Step;
+import io.qameta.allure.junit4.DisplayName;
+import net.datafaker.Faker;
 import org.junit.*;
-import PageObject.RegistrationPage;
-import Utils.ApiUtils;
-import Utils.BrowserProvider;
+import pageobject.LoginPage;
+import pageobject.RegistrationPage;
+import utils.ApiUtils;
+import utils.BrowserProvider;
+import utils.UserModel;
 
+import java.time.Duration;
+
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.url;
 import static org.junit.Assert.*;
+import static pageobject.MainPage.BASE_URL_REGISTER;
 
 public class RegistrationTest {
 
     private RegistrationPage registrationPage;
-
-    // Тестовые данные
-    private final String testEmail = "tester" + System.currentTimeMillis() + "@mail.ru";
-    private final String testPassword = "Password123!";  // ≥ 6 символов
-    private final String testName = "Test User";
-
-    // API-токен для удаления пользователя после успешной регистрации
+    private UserModel testUser;
     private String accessToken;
+    private static Faker faker;
 
     @BeforeClass
     public static void setupClass() {
-        // Указываем браузер: "chrome" или "yandex"
         BrowserProvider.configureSelenide("yandex");
+        faker = new Faker();
     }
 
     @Before
     public void setup() {
-        // Открываем сразу страницу регистрации
-        open("https://stellarburgers.nomoreparties.site/register");
+        open(BASE_URL_REGISTER);
         registrationPage = new RegistrationPage();
+
+        String email = faker.internet().emailAddress();
+        String name = faker.name().fullName();
+        String password = faker.internet().password(8, 16);
+
+        testUser = new UserModel(email, password, name);
         accessToken = null;
     }
 
     @After
     public void teardown() {
-        // Закрываем браузер
         closeWebDriver();
-
-        // Если accessToken != null, это значит, что пользователь уже создан в API, удаляем его
         if (accessToken != null) {
             ApiUtils.deleteUser(accessToken);
         }
     }
 
     @Test
-    @Step("Успешная регистрация нового пользователя")
+    @DisplayName("Успешная регистрация нового пользователя")
     public void testSuccessfulRegistration() {
-        // Шаг 1: заполняем форму регистрацией с корректными данными
-        registrationPage.register(testName, testEmail, testPassword);
+        registrationPage.register(testUser.getName(), testUser.getEmail(), testUser.getPassword());
+        LoginPage.loginButton.shouldBe(visible, Duration.ofSeconds(10));
 
-        String currentUrl = url();
-        assertTrue(
-                "После успешной регистрации ожидаем URL с 'profile', но был: " + currentUrl,
-                currentUrl.contains("profile")
-        );
-
-        // Шаг 3: чтобы удалить пользователя через API, надо получить accessToken.
-        // Сделаем дополнительный вызов API для создания "такого же" пользователя и получения токена.
-        accessToken = ApiUtils.createUser(testEmail, testPassword, testName);
-        assertNotNull("AccessToken не должен быть null после API-создания", accessToken);
+        // Получаем accessToken через API логина
+        accessToken = ApiUtils.loginUser(testUser.getEmail(), testUser.getPassword());
+        assertNotNull("AccessToken не должен быть null после логина", accessToken);
     }
 
     @Test
-    @Step("Ошибка при регистрации: слишком короткий пароль (< 6 символов)")
+    @DisplayName("Ошибка при регистрации: слишком короткий пароль (< 6 символов)")
     public void testRegistrationWithShortPassword() {
-        // Шаг 1: формируем пароль короче 6 символов
-        String shortPassword = "12345"; // 5 символов
-
-        // Шаг 2: пытаемся зарегистрироваться
-        registrationPage.register(testName, testEmail, shortPassword);
-
-        // Шаг 3: ожидаем появление сообщения об ошибке "Некорректный пароль"
+        String shortPassword = "12345";
+        registrationPage.register(testUser.getName(), testUser.getEmail(), shortPassword);
         String actualError = registrationPage.getErrorMessage();
-        assertEquals(
-                "Ожидаем текст ошибки 'Некорректный пароль', но было: " + actualError,
-                "Некорректный пароль",
-                actualError
-        );
+        assertEquals("Некорректный пароль", actualError);
     }
 }
+
+
+
+
 

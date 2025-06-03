@@ -1,4 +1,4 @@
-package Utils;
+package utils;
 
 import com.codeborne.selenide.Configuration;
 import org.openqa.selenium.chrome.ChromeOptions;

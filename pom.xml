@@ -66,6 +66,13 @@
             <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- DataFaker для генерации тестовых данных -->
+        <dependency>
+            <groupId>net.datafaker</groupId>
+            <artifactId>datafaker</artifactId>
+            <version>1.8.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -128,5 +135,6 @@
     </build>
 
 </project>
+
 
 
