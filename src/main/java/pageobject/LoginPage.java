@@ -36,7 +36,6 @@ public class LoginPage {
         setPassword(password);
         clickLogin();
     }
-
     @Step("Клик по ссылке регистрации")
     public void clickRegisterLink() {
         registerLink.click();
@@ -46,7 +45,6 @@ public class LoginPage {
     public void clickForgotPasswordLink() {
         forgotPasswordLink.click();
     }
-
     @Step("Клик по кнопке входа на странице восстановления пароля")
     public void clickLoginFromForgottenPasswordLink() {
         loginFromForgottenPasswordLink.click();

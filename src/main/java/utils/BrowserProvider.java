@@ -18,8 +18,8 @@ public class BrowserProvider {
         } else if ("chrome".equalsIgnoreCase(browser)) {
             // Драйвер для Chrome версии 136
             System.setProperty("webdriver.chrome.driver", "C:\\WebDriver\\bin\\chromedriver.exe");
-            // Путь к Chrome по умолчанию, можно не указывать, если установлен стандартно
-            // options.setBinary("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe");
+
+            options.setBinary("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe");
             Configuration.browser = "chrome";
         } else {
             throw new IllegalArgumentException("❌ Поддерживаются только браузеры: chrome или yandex");

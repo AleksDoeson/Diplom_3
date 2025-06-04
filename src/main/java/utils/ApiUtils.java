@@ -26,9 +26,11 @@ public class ApiUtils {
 
     @Step("Логин пользователя через API и получение токена: {email}")
     public static String loginUser(String email, String password) {
+        UserModel loginUser = new UserModel(email, password, null); // имя не нужно для логина
+
         Response response = RestAssured.given()
                 .contentType("application/json")
-                .body("{\"email\":\"" + email + "\", \"password\":\"" + password + "\"}")
+                .body(loginUser) // сериализация в JSON
                 .post(BASE_URL_API + "/auth/login");
 
         if (response.statusCode() == 200) {

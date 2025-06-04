@@ -31,12 +31,10 @@ public class RegistrationPage {
     public void setEmail(String email) {
         emailInput.shouldBe(visible).setValue(email);
     }
-
     @Step("Ввести пароль: {password}")
     public void setPassword(String password) {
         passwordInput.shouldBe(visible).setValue(password);
     }
-
     @Step("Нажать кнопку 'Зарегистрироваться'")
     public void clickRegister() {
         registerButton.shouldBe(visible).click();

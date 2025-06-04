@@ -1,9 +1,7 @@
 package pageobject;
 
-
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
-
 
 import java.time.Duration;
 import java.util.Objects;
@@ -27,8 +25,7 @@ public class ConstructorPage {
         String screenshotName = screenshot("after_click_buns");
         System.out.println("Скриншот сделан: " + screenshotName);
 
-        SelenideElement buns = $x("//div[contains(@class, 'tab')]/span[text()='Булки']/..");
-        buns.shouldHave(attributeMatching("class", ".*tab_tab_type_current.*"), Duration.ofSeconds(5));
+        bunsTab.shouldHave(attributeMatching("class", ".*tab_tab_type_current.*"), Duration.ofSeconds(5));
         System.out.println("Вкладка 'Булки' активна");
     }
 
@@ -40,8 +37,7 @@ public class ConstructorPage {
         String screenshotName = screenshot("after_click_sauces");
         System.out.println("Скриншот сделан: " + screenshotName);
 
-        SelenideElement sauces = $x("//div[contains(@class, 'tab')]/span[text()='Соусы']/..");
-        sauces.shouldHave(attributeMatching("class", ".*tab_tab_type_current.*"), Duration.ofSeconds(5));
+        saucesTab.shouldHave(attributeMatching("class", ".*tab_tab_type_current.*"), Duration.ofSeconds(5));
         System.out.println("Вкладка 'Соусы' активна");
     }
 
@@ -53,8 +49,7 @@ public class ConstructorPage {
         String screenshotName = screenshot("after_click_fillings");
         System.out.println("Скриншот сделан: " + screenshotName);
 
-        SelenideElement fillings = $x("//div[contains(@class, 'tab')]/span[text()='Начинки']/..");
-        fillings.shouldHave(attributeMatching("class", ".*tab_tab_type_current.*"), Duration.ofSeconds(5));
+        fillingsTab.shouldHave(attributeMatching("class", ".*tab_tab_type_current.*"), Duration.ofSeconds(5));
         System.out.println("Вкладка 'Начинки' активна");
     }
 
